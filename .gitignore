@@ -1,0 +1,22 @@
+# Configuración local y credenciales
+.env
+.env.*
+!.env.example
+.mcp.json
+.vercel/
+.openai/
+scratch/
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+
+# Archivos generados
+node_modules/
+dist/
+coverage/
+*.log
+.DS_Store
+supabase/.temp/
