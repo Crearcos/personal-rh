@@ -21,6 +21,13 @@ describe('acceso protegido de demostración', () => {
     expect(await screen.findByRole('button', { name: 'Ingresar' })).toBeInTheDocument();
     expect(screen.queryByText('Aplicación protegida')).not.toBeInTheDocument();
   });
+  it('muestra la pantalla de marca mientras comprueba el acceso', async () => {
+    api.getUser.mockReturnValue(new Promise(() => {}));
+    render(<AccesoProtegido>{() => <p>Aplicación protegida</p>}</AccesoProtegido>);
+    expect(screen.getByRole('status', { name: 'Cargando PersonalHR' })).toBeInTheDocument();
+    expect(screen.getByText('PersonalHR')).toBeInTheDocument();
+    expect(screen.queryByText('Aplicación protegida')).not.toBeInTheDocument();
+  });
   it('permite entrar solo cuando la cuenta tiene al menos una empresa autorizada', async () => {
     api.signIn.mockResolvedValue({ data: { session: {} }, error: null });
     api.getUser.mockResolvedValueOnce({ data: { user: null }, error: null }).mockResolvedValue({ data: { user: { id: 'user-1' } }, error: null });
