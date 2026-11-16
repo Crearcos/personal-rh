@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Navbar } from './components/Navbar';
+import { PantallaCarga } from './components/PantallaCarga';
 import { CambiarContrasena } from './components/CambiarContrasena';
 import { RestablecerDemo } from './components/RestablecerDemo';
 import { cambiarContrasenaCuenta } from './services/cambiarContrasenaCuenta';
@@ -524,6 +525,8 @@ export const App: React.FC<AppProps> = ({ empresasAutorizadas, accesos, onCerrar
 
   const handleResetDemo = async (): Promise<void> => { setRestablecimientoAbierto(true); };
 
+  if (isLoading && !cambiandoContrasena) return <PantallaCarga />;
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col antialiased overflow-x-clip">
       {/* Barra de Navegación Principal */}
@@ -550,14 +553,7 @@ export const App: React.FC<AppProps> = ({ empresasAutorizadas, accesos, onCerrar
 
       {/* Contenido Principal */}
       <main className="flex-1 pb-24 sm:pb-16">
-        {cambiandoContrasena ? <CambiarContrasena onGuardar={cambiarContrasenaCuenta} onVolver={() => setCambiandoContrasena(false)} /> : isLoading ? (
-          <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-3">
-            <div className="w-8 h-8 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin" />
-            <p className="text-sm font-medium text-slate-500">
-              Conectando con Supabase y cargando datos...
-            </p>
-          </div>
-        ) : !sesionDemo ? (
+        {cambiandoContrasena ? <CambiarContrasena onGuardar={cambiarContrasenaCuenta} onVolver={() => setCambiandoContrasena(false)} /> : !sesionDemo ? (
           <section className="mx-auto mt-8 max-w-xl rounded-2xl border border-slate-200 bg-white p-6 text-slate-800 shadow-soft" role={errorIdentidad ? 'alert' : undefined}>
             <h1 className="text-lg font-bold tracking-tight">{errorIdentidad ? 'No pudimos cargar tu identidad' : permitirCambioRol ? 'Vista de demostración no disponible' : 'Cuenta no disponible'}</h1>
             <p className="mt-2 text-sm text-slate-600">{errorIdentidad ? 'Comprueba tu conexión e inténtalo nuevamente.' : permitirCambioRol ? `Esta empresa no tiene una persona activa asignada al rol ${currentRole === 'jefe' ? 'de jefe' : currentRole === 'empleado' ? 'de empleado' : 'de RR. HH.'}.` : 'Tu perfil no está activo o no coincide con tu acceso. Contacta con RR. HH.'}</p>

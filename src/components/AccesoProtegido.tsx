@@ -4,6 +4,7 @@ import { iniciarSesion, cerrarSesion } from '../services/accesoCuenta';
 import { consultarAccesosAutorizados, type AccesoAutorizado } from '../services/accesoDemo';
 import { AccesoRRHH } from './AccesoRRHH';
 import { CierreSesionPendiente } from './CierreSesionPendiente';
+import { PantallaCarga } from './PantallaCarga';
 import { existeCierrePendiente, guardarCierrePendiente } from '../services/cierrePendiente';
 
 interface Props {
@@ -99,7 +100,7 @@ export function AccesoProtegido({ children }: Props) {
   }
 
   if (estadoCierre !== 'inactivo') return <CierreSesionPendiente cerrando={estadoCierre === 'cerrando'} reintentar={() => void salir()} />;
-  if (cargando) return <main className="min-h-screen bg-slate-50 p-6 text-sm text-slate-700" role="status">Comprobando acceso…</main>;
+  if (cargando) return <PantallaCarga />;
   if (!accesos.length) return <AccesoRRHH onIngresar={ingresar} />;
   const identidad = JSON.stringify(accesos.map(({ empresa_id, rol, empleado_id }) => [empresa_id, rol, empleado_id]).sort());
   return <React.Fragment key={identidad}>{children({ empresas: [...new Set(accesos.map((acceso) => acceso.empresa_id))], accesos, salir })}</React.Fragment>;

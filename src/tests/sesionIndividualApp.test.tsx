@@ -26,6 +26,12 @@ vi.mock('../services/repository', () => {
 });
 
 describe('sesión individual', () => {
+  it('muestra la misma carga a pantalla completa antes de mostrar la navegación', async () => {
+    render(<App empresasAutorizadas={['a']} accesos={[{ empresa_id: 'a', rol: 'jefe', empleado_id: 'e2' }]} />);
+    expect(screen.getByRole('status', { name: 'Cargando PersonalHR' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Empresa A' })).not.toBeInTheDocument();
+    expect(await screen.findByText('Jefe: Jefa vinculada')).toBeInTheDocument();
+  });
   it('utiliza la persona vinculada y no permite cambiar de rol', async () => {
     render(<App empresasAutorizadas={['a']} accesos={[{ empresa_id: 'a', rol: 'jefe', empleado_id: 'e2' }]} />);
     expect(await screen.findByText('Jefe: Jefa vinculada')).toBeInTheDocument();
