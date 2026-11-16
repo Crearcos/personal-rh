@@ -1,4 +1,4 @@
-# Configuración local y credenciales
+# Configuración local y credenciales; conservar únicamente la plantilla pública.
 .env
 .env.*
 !.env.example
@@ -13,7 +13,7 @@ scratch/
 *.jks
 *.keystore
 
-# Archivos generados
+# Dependencias, resultados locales y archivos generados.
 node_modules/
 dist/
 coverage/
